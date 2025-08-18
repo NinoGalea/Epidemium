@@ -11,5 +11,5 @@ export default {
         CURED: '#08c020'
     },
 
-    POPULATION_SIZE: 100,
+    POPULATION_SIZE: 1000,
 }

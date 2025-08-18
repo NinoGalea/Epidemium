@@ -20,7 +20,7 @@ export class Infection {
         this.incubationPeriod = incubationPeriod;
         this.duration = duration;
         this.contagionRate = contagionRate;
-        this.momortalityRate = mortalityRate;
+        this.mortalityRate = mortalityRate;
         this.recoveryRate = recoveryRate;
     }
 }

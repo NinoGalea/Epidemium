@@ -1,5 +1,6 @@
 import { ctx, disease } from "../main.js";
 import Settings from "../settings.js";
+import { STEPS_COUNT } from "../time.js";
 import { Chunk, Chunks, chunkSize } from "./Chunk.js";
 
 export const Humans = new Map();
@@ -21,6 +22,7 @@ export class Human {
         this.updateChunk();
 
         this.status = status;
+        this.infectionTimestamp = null;
 
         Humans.set(this.id, this);
     }
@@ -49,25 +51,51 @@ export class Human {
             neighbours = neighbours.concat(c.humans);
         }
 
-        // Update based of the distance with the neighbours
-        if (this.status == "healthy") {
-            for (const neighbourID of neighbours) {
-                /** @type {Human | null} */
-                const neighbour = Humans.get(neighbourID);
-                if (!neighbour) continue;
 
-                // If not contaminated, ignore
-                if (neighbour.status !== "infected") continue;
 
-                // Get distance
-                const distance = Math.sqrt(Math.pow(this.position.x - neighbour.position.x, 2) + Math.pow(this.position.y - neighbour.position.y, 2)) - this.radius - neighbour.radius;
-                const chanceToGetContaminated = (distance) => { return (Settings.SIMULATION_SPEED / Settings.STEPS_PER_SECOND) * (disease.contagionRate / (10 * (distance) + 0.01)) };
-                const random = Math.random();
-                if (random <= chanceToGetContaminated(distance)) {
-                    // this.incubate();
+        // Update based of the status, distance with the neighbours, ect
+        switch (this.status) {
+            case "healthy":
+                for (const neighbourID of neighbours) {
+                    /** @type {Human | null} */
+                    const neighbour = Humans.get(neighbourID);
+                    if (!neighbour) continue;
+
+                    // If not contaminated, ignore
+                    if (neighbour.status !== "infected") continue;
+
+                    // Get distance
+                    const distance = Math.sqrt(Math.pow(this.position.x - neighbour.position.x, 2) + Math.pow(this.position.y - neighbour.position.y, 2)) - this.radius - neighbour.radius;
+                    const chanceToGetContaminated = (distance) => { return (Settings.SIMULATION_SPEED / Settings.STEPS_PER_SECOND) * (disease.contagionRate / (10 * (distance) + 0.01)) };
+                    const random = Math.random();
+                    if (random <= chanceToGetContaminated(distance)) {
+                        this.incubate();
+                    }
+                }
+                break;
+
+            case "incubating": 
+                if (STEPS_COUNT - this.infectionTimestamp >= disease.incubationPeriod) {
                     this.infect();
                 }
-            }
+                break;
+            
+            case "infected":
+                if (STEPS_COUNT - this.infectionTimestamp >= disease.incubationPeriod + disease.duration) {
+                    if (Math.random() < disease.mortalityRate) {
+                        this.die();
+                    } else {
+                        if (Math.random() > disease.recoveryRate) {
+                            this.recover();
+                        } else {
+                            this.cure();
+                        }
+                    }
+                } 
+                break;
+                
+            default:
+                break;
         }
     }
 
@@ -99,13 +127,36 @@ export class Human {
      * Infects a human with the disease
      */
     incubate() {
+        this.infectionTimestamp = STEPS_COUNT;
         this.status = "incubating";
     }
 
     /**
-     * 
+     * Stops the incubating process and goes to the infectious status
      */
     infect() {
         this.status = "infected";
     }
+    
+    /**
+     * Kills a human
+    */
+   die() {
+        this.status = "dead";
+    }
+    
+    /**
+     * Make a human get back to the default status
+     */
+    recover() {
+        this.status = "healthy";
+    }
+
+    /**
+     * Cures a human
+     */
+    cure() {
+        this.status = "cured";
+    }
+    
 }

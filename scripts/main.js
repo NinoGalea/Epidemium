@@ -21,12 +21,21 @@ for (let i = 0; i < Math.ceil(CANVAS.width / chunkSize); i++) {
 }
 
 // Setup disease
-export var disease = new Infection({ name: "Disease", incubationPeriod: 10, duration: 10, contagionRate: 4, mortalityRate: 0.2, recoveryRate: 0.4 })
+export var disease = new Infection({
+    name: "Disease",
+    incubationPeriod: 250,
+    duration: 500,
+    contagionRate: 4,
+    mortalityRate: 0.1,
+    recoveryRate: 0.5
+})
 
 // Setup humans
 for (let i = 0; i < Settings.POPULATION_SIZE; i++) {
     new Human({
-        position: { x: Math.random() * 0.95 * CANVAS.width, y: Math.random() * 0.95 * CANVAS.height },
+        position: { 
+            x: Math.random() * 0.95 * CANVAS.width + 0.025 * CANVAS.width, 
+            y: Math.random() * 0.95 * CANVAS.height + 0.025 * CANVAS.height },
         status: "healthy",
     })
 }
