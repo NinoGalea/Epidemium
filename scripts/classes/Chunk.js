@@ -39,8 +39,12 @@ export class Chunk {
     }
 
     show() {
-        ctx.strokeRect(this.bounds[0].x, this.bounds[0].y, chunkSize, chunkSize);        
-        ctx.fillText(`(${this.x}, ${this.y})`, this.x * chunkSize + 2, this.y * chunkSize + 10);
+        ctx.strokeStyle = "#000000" 
+        ctx.fillStyle = "#000000"
+        ctx.textAlign = "left"
+        ctx.font = "10px sans-serif"
+        ctx.strokeRect(this.bounds[0].x, this.bounds[0].y, chunkSize, chunkSize);
+        ctx.fillText(`(${this.x}, ${this.y})`, this.x * chunkSize + 3, this.y * chunkSize + 10);
     }
 
     static getChunk({ x, y }) {

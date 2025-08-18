@@ -1,6 +1,7 @@
 export default {
     SIMULATION_SPEED: 1.0,
     STEPS_PER_SECOND: 50, 
+    PAUSED: false,
 
     COLORS: {
         DEAD: '#000000',
@@ -12,4 +13,7 @@ export default {
     },
 
     POPULATION_SIZE: 1000,
+    SHOW_CHUNKS: true,
+
+    STATS_DISPLAY: false
 }

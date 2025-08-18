@@ -4,6 +4,7 @@ import { STEPS_COUNT } from "../time.js";
 import { Chunk, Chunks, chunkSize } from "./Chunk.js";
 
 export const Humans = new Map();
+export const HumansCountHistory = new Array(); 
 
 export class Human {
     /**
@@ -159,4 +160,26 @@ export class Human {
         this.status = "cured";
     }
     
+    static count() {
+        const statuses = {
+            healthy: 0,
+            incubating: 0,
+            infected: 0,
+            vaccinated: 0, 
+            cured: 0,
+            dead: 0
+        }
+        for (const Human of Humans.values()) {
+            statuses[Human.status]++;
+        }
+        return statuses;
+    }
+
+    static updateHistory() {
+        HumansCountHistory.push(Human.count());
+    }
+
+    static countHistory() {
+        return HumansCountHistory;
+    }
 }
