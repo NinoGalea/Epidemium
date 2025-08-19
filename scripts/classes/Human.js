@@ -1,10 +1,10 @@
-import { ctx, disease } from "../main.js";
+import { ctx, getDisease } from "../main.js";
 import Settings from "../settings.js";
 import { STEPS_COUNT } from "../time.js";
 import { Chunk, Chunks, chunkSize } from "./Chunk.js";
 
 export const Humans = new Map();
-export const HumansCountHistory = new Array(); 
+export const HumansCountHistory = new Array();
 
 export class Human {
     /**
@@ -67,7 +67,7 @@ export class Human {
 
                     // Get distance
                     const distance = Math.sqrt(Math.pow(this.position.x - neighbour.position.x, 2) + Math.pow(this.position.y - neighbour.position.y, 2)) - this.radius - neighbour.radius;
-                    const chanceToGetContaminated = (distance) => { return (Settings.SIMULATION_SPEED / Settings.STEPS_PER_SECOND) * (disease.contagionRate / (10 * (distance) + 0.01)) };
+                    const chanceToGetContaminated = (distance) => { return (Settings.SIMULATION_SPEED / Settings.STEPS_PER_SECOND) * (getDisease().contagionRate / (2 * (distance) + 0.01)) };
                     const random = Math.random();
                     if (random <= chanceToGetContaminated(distance)) {
                         this.incubate();
@@ -75,26 +75,26 @@ export class Human {
                 }
                 break;
 
-            case "incubating": 
-                if (STEPS_COUNT - this.infectionTimestamp >= disease.incubationPeriod) {
+            case "incubating":
+                if (STEPS_COUNT - this.infectionTimestamp >= getDisease().incubationPeriod) {
                     this.infect();
                 }
                 break;
-            
+
             case "infected":
-                if (STEPS_COUNT - this.infectionTimestamp >= disease.incubationPeriod + disease.duration) {
-                    if (Math.random() < disease.mortalityRate) {
+                if (STEPS_COUNT - this.infectionTimestamp >= getDisease().incubationPeriod + getDisease().duration) {
+                    if (Math.random() < getDisease().mortalityRate) {
                         this.die();
                     } else {
-                        if (Math.random() > disease.recoveryRate) {
+                        if (Math.random() > getDisease().recoveryRate) {
                             this.recover();
                         } else {
                             this.cure();
                         }
                     }
-                } 
+                }
                 break;
-                
+
             default:
                 break;
         }
@@ -138,14 +138,14 @@ export class Human {
     infect() {
         this.status = "infected";
     }
-    
+
     /**
      * Kills a human
     */
-   die() {
+    die() {
         this.status = "dead";
     }
-    
+
     /**
      * Make a human get back to the default status
      */
@@ -159,13 +159,13 @@ export class Human {
     cure() {
         this.status = "cured";
     }
-    
+
     static count() {
         const statuses = {
             healthy: 0,
             incubating: 0,
             infected: 0,
-            vaccinated: 0, 
+            vaccinated: 0,
             cured: 0,
             dead: 0
         }

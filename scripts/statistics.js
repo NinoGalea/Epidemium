@@ -1,5 +1,5 @@
 import Settings from "./settings.js";
-import { CANVAS, ctx, disease } from "./main.js";
+import { CANVAS, ctx, getDisease } from "./main.js";
 import { Human } from "./classes/Human.js";
 import { STEPS_COUNT } from "./time.js";
 
@@ -41,13 +41,13 @@ export function main() {
     // Display disease data
     ctx.textAlign = "right"
     ctx.fillStyle = "#ffffff";
-    ctx.fillText(`${Settings.PAUSED ? '(Paused) ' : ' '}${STEPS_COUNT}`, statsPopup.x + statsPopup.w - 5, statsPopup.y + 1 * statsPopup.fontSize);
-    ctx.fillText(`Infection: ${disease.name}`, statsPopup.x + statsPopup.w - 5, statsPopup.y + 2 * statsPopup.fontSize);
-    ctx.fillText(`Incubation period: ${disease.incubationPeriod}`, statsPopup.x + statsPopup.w - 5, statsPopup.y + 3 * statsPopup.fontSize);
-    ctx.fillText(`Duration: ${disease.duration}`, statsPopup.x + statsPopup.w - 5, statsPopup.y + 4 * statsPopup.fontSize);
-    ctx.fillText(`Contagion rate: ${disease.contagionRate}`, statsPopup.x + statsPopup.w - 5, statsPopup.y + 5 * statsPopup.fontSize);
-    ctx.fillText(`Mortality rate: ${disease.mortalityRate}`, statsPopup.x + statsPopup.w - 5, statsPopup.y + 6 * statsPopup.fontSize);
-    ctx.fillText(`Recovery rate: ${disease.recoveryRate}`, statsPopup.x + statsPopup.w - 5, statsPopup.y + 7 * statsPopup.fontSize);
+    ctx.fillText(`${Settings.PAUSED ? '(Paused) ' : `${Settings.IS_SIMULATION_RUNNING ? '(Stopped) ' : ''}`}${STEPS_COUNT}`, statsPopup.x + statsPopup.w - 5, statsPopup.y + 1 * statsPopup.fontSize);
+    ctx.fillText(`Infection: ${getDisease().name}`, statsPopup.x + statsPopup.w - 5, statsPopup.y + 2 * statsPopup.fontSize);
+    ctx.fillText(`Incubation period: ${getDisease().incubationPeriod}`, statsPopup.x + statsPopup.w - 5, statsPopup.y + 3 * statsPopup.fontSize);
+    ctx.fillText(`Duration: ${getDisease().duration}`, statsPopup.x + statsPopup.w - 5, statsPopup.y + 4 * statsPopup.fontSize);
+    ctx.fillText(`Contagion rate: ${getDisease().contagionRate}`, statsPopup.x + statsPopup.w - 5, statsPopup.y + 5 * statsPopup.fontSize);
+    ctx.fillText(`Mortality rate: ${getDisease().mortalityRate}`, statsPopup.x + statsPopup.w - 5, statsPopup.y + 6 * statsPopup.fontSize);
+    ctx.fillText(`Recovery rate: ${getDisease().recoveryRate}`, statsPopup.x + statsPopup.w - 5, statsPopup.y + 7 * statsPopup.fontSize);
 
     // Display graph
     const graphData = {

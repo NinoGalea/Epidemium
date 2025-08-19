@@ -15,4 +15,5 @@ export function togglePause() {
 export function stopSimulation () {
     Settings.PAUSED = true;
     Settings.SIMULATION_SPEED = 0.0;
+    Settings.IS_SIMULATION_RUNNING = false;
 }

@@ -1,6 +1,7 @@
 export default {
+    IS_SIMULATION_RUNNING: false,
     SIMULATION_SPEED: 1.0,
-    STEPS_PER_SECOND: 50, 
+    STEPS_PER_SECOND: 50,
     PAUSED: false,
 
     COLORS: {

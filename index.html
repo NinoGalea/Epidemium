@@ -7,7 +7,63 @@
 
     <script src="./scripts/main.js" type="module" defer></script>
 </head>
-<body style="margin: 0; padding: 0; height: 100%;">
-    <canvas style="display: block; width: 100vw; height: 100vh;"></canvas>
+<body>
+    <canvas></canvas>
+
+    <div id="setup">
+        <form>
+            <h1>Epidemium</h1>
+            <div><label for="infectionName">Infection name</label><input type="text" name="infectionName" placeholder="Infection name" required></div>
+            <div><label for="incubationPeriod">Incubation period</label><input type="number" name="incubationPeriod" placeholder="Incubation period" min="0" step="1" value="250" required></div>
+            <div><label for="duration">Duration</label><input type="number" name="duration" placeholder="Duration" min="0" step="1" value="500" required></div>
+            <div><label for="contagionRate">Contagion rate</label><input type="number" name="contagionRate" placeholder="Contagion Rate" min="0" step="0.01" max="1" value="0.8" required></div>
+            <div><label for="mortalityRate">Mortality rate</label><input type="number" name="mortalityRate" placeholder="Mortality rate" min="0" step="0.01" max="1" value="0.1" required></div>
+            <div><label for="recoveryRate">Recovery rate</label><input type="number" name="recoveryRate" placeholder="Recovery rate" min="0" step="0.01" max="1" value="0.5" required></div>
+            <div><label for="populationSize">Population size</label><input type="number" name="populationSize" placeholder="Population Size" min="0" step="1" max="10000" value="1000" required></div>
+            <button type="submit">Start Simulation</button>
+        </form>
+    </div>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+        canvas, #setup {
+            position: absolute;
+            display: block;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+
+            position: relative;
+            margin: auto;
+            top: 50%;
+            transform: translateY(-50%);
+
+            width: fit-content;
+        }
+
+        form>h1 {
+            text-align: center;
+        }
+
+        form>div {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
+        form>div>input {
+            width: 50%;
+        }
+    </style>
+
 </body>
 </html>

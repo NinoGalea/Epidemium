@@ -2,8 +2,33 @@ import { Chunk, Chunks, chunkSize } from "./classes/Chunk.js";
 import { Human, Humans } from "./classes/Human.js";
 import { Infection } from "./classes/Infection.js";
 import Settings from "./settings.js";
-import { stopSimulation, togglePause, updateTime } from "./time.js";
+import { STEPS_COUNT, stopSimulation, togglePause, updateTime } from "./time.js";
 import { main as Statistics } from "./statistics.js";
+
+// Setup from user input
+let disease;
+const setupPage = document.querySelector('div#setup');
+const form = document.querySelector('div#setup>form');
+if (!form || !setupPage) throw new Error("Form element not found");
+
+form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const formData = new FormData(form);
+    disease = new Infection({
+        name: formData.get('infectionName'),
+        incubationPeriod: parseInt(formData.get('incubationPeriod')),
+        duration: parseInt(formData.get('duration')),
+        contagionRate: parseFloat(formData.get('contagionRate')),
+        mortalityRate: parseFloat(formData.get('mortalityRate')),
+        recoveryRate: parseFloat(formData.get('recoveryRate')),
+    });
+    Settings.POPULATION_SIZE = parseInt(formData.get('populationSize'));
+    setup();
+    setupPage.style.display = 'none';
+});
+export function getDisease() {
+    return disease;
+}
 
 // Setup canvas
 const CANVAS = document.querySelector('canvas');
@@ -15,69 +40,76 @@ export const ctx = CANVAS.getContext('2d');
 if (!ctx) throw new Error("Your browser does not support canvas.");
 
 // Setup keys event listeners
-let statsPopupWindow = null;
-addEventListener("keydown", (event) => {    
-    if (event.key == 'i' || event.key == 'I') {
-        Settings.STATS_DISPLAY = !Settings.STATS_DISPLAY;
-        displayStatsFrame();
-    }
-    if (event.key == 'g' || event.key == 'G') {
-        Settings.SHOW_CHUNKS = !Settings.SHOW_CHUNKS;
-    }
-    if (event.code == 'Space') {
-        togglePause();
+addEventListener("keydown", (event) => {
+    if (Settings.IS_SIMULATION_RUNNING) {
+        if (event.key == 'i' || event.key == 'I') {
+            Settings.STATS_DISPLAY = !Settings.STATS_DISPLAY;
+            displayStatsFrame();
+        }
+        if (event.key == 'g' || event.key == 'G') {
+            Settings.SHOW_CHUNKS = !Settings.SHOW_CHUNKS;
+        }
+        if (event.code == 'Space') {
+            togglePause();
+            displayStatsFrame();
+        }
     }
 });
 
-// Setup chunks
-for (let i = 0; i < Math.ceil(CANVAS.width / chunkSize); i++) {
-    for (let j = 0; j < Math.ceil(CANVAS.height / chunkSize); j++) {
-        new Chunk({ x: i, y: j });
+// Handle refresh
+addEventListener('beforeunload', (event) => {
+    if (Settings.IS_SIMULATION_RUNNING) {
+        event.preventDefault();
     }
+});
+
+// Setup 
+function setup() {
+    // Setup chunks
+    for (let i = 0; i < Math.ceil(CANVAS.width / chunkSize); i++) {
+        for (let j = 0; j < Math.ceil(CANVAS.height / chunkSize); j++) {
+            new Chunk({ x: i, y: j });
+        }
+    }
+
+    // Setup humans
+    for (let i = 0; i < Settings.POPULATION_SIZE; i++) {
+        new Human({
+            position: {
+                x: Math.random() * 0.95 * CANVAS.width + 0.025 * CANVAS.width,
+                y: Math.random() * 0.95 * CANVAS.height + 0.025 * CANVAS.height
+            },
+            status: "healthy",
+        })
+    }
+
+    // Select random for first contamination
+    Humans.get(Math.floor(Math.random() * Humans.size)).infect();
+
+    // Start simulation
+    Settings.IS_SIMULATION_RUNNING = true;
+    setTimeout(main, 1000 * Settings.SIMULATION_SPEED / Settings.STEPS_PER_SECOND);
 }
 
-// Setup disease
-export var disease = new Infection({
-    name: "Disease",
-    incubationPeriod: 250,
-    duration: 500,
-    contagionRate: 4,
-    mortalityRate: 0.1,
-    recoveryRate: 0.5
-})
-
-// Setup humans
-for (let i = 0; i < Settings.POPULATION_SIZE; i++) {
-    new Human({
-        position: {
-            x: Math.random() * 0.95 * CANVAS.width + 0.025 * CANVAS.width,
-            y: Math.random() * 0.95 * CANVAS.height + 0.025 * CANVAS.height
-        },
-        status: "healthy",
-    })
-}
-
-
-// Select random for first contamination
-Humans.get(Math.floor(Math.random() * Humans.size)).infect();
-console.log(Humans);
 
 // Main loop
 function main() {
+    // Stop the loop if the simulation is not supposed to run
+    if (!Settings.IS_SIMULATION_RUNNING) { displayStatsFrame(); };
+
     // Update simulation
     if (!Settings.PAUSED) {
         updateTime();
         clearScreen();
         updateHumans();
         drawHumans();
-    } 
+    }
     displayStatsFrame();
     stopAtEnd();
 
     // Launch a new loop
     setTimeout(main, 1000 * Settings.SIMULATION_SPEED / Settings.STEPS_PER_SECOND);
 }
-setTimeout(main, 1000 * Settings.SIMULATION_SPEED / Settings.STEPS_PER_SECOND);
 
 // Handler functions
 function clearScreen() {
