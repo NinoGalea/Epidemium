@@ -16,5 +16,6 @@ export default {
     POPULATION_SIZE: 1000,
     SHOW_CHUNKS: true,
 
-    STATS_DISPLAY: false
+    STATS_DISPLAY: false,
+    STATS_ANCHOR: {x: null, y: null}
 }

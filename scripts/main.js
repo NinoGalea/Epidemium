@@ -63,8 +63,21 @@ addEventListener('beforeunload', (event) => {
     }
 });
 
+// Handle right click to move the statistics page
+CANVAS.addEventListener('contextmenu', (event) => {
+    event.preventDefault();
+    if (Settings.IS_SIMULATION_RUNNING && Settings.STATS_DISPLAY) {
+        Settings.STATS_ANCHOR.x = event.clientX;
+        Settings.STATS_ANCHOR.y = event.clientY;
+    }
+});
+
 // Setup 
 function setup() {
+    // Setup default stats page anchor
+    Settings.STATS_ANCHOR.x = Math.min(CANVAS.width * 2 / 3, CANVAS.width - 200) + 5;
+    Settings.STATS_ANCHOR.y = 5;
+
     // Setup chunks
     for (let i = 0; i < Math.ceil(CANVAS.width / chunkSize); i++) {
         for (let j = 0; j < Math.ceil(CANVAS.height / chunkSize); j++) {

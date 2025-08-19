@@ -6,8 +6,8 @@ import { STEPS_COUNT } from "./time.js";
 export function main() {
     // Calculate boundaries
     const statsPopup = {
-        x: Math.min(CANVAS.width * 2 / 3, CANVAS.width - 200) + 5,
-        y: 5,
+        x: Settings.STATS_ANCHOR.x,
+        y: Settings.STATS_ANCHOR.y,
         w: Math.min(CANVAS.width / 3, CANVAS.width - 200) - 10,
         h: CANVAS.height / 2 - 10,
         fontSize: 15
@@ -17,7 +17,7 @@ export function main() {
     ctx.fillStyle = "#000000";
     ctx.fillRect(statsPopup.x - 5, statsPopup.y - 5, statsPopup.w + 10, statsPopup.h + 10);
     ctx.fillStyle = "#303030";
-    ctx.fillRect(Math.min(CANVAS.width * 2 / 3, CANVAS.width - 200) + 5, 5, Math.min(CANVAS.width / 3, CANVAS.width - 200) - 10, CANVAS.height / 2 - 10);
+    ctx.fillRect(statsPopup.x, statsPopup.y, statsPopup.w, statsPopup.h);
 
     // Population data
     const population = Human.count();
@@ -41,7 +41,7 @@ export function main() {
     // Display disease data
     ctx.textAlign = "right"
     ctx.fillStyle = "#ffffff";
-    ctx.fillText(`${Settings.PAUSED ? '(Paused) ' : `${Settings.IS_SIMULATION_RUNNING ? '(Stopped) ' : ''}`}${STEPS_COUNT}`, statsPopup.x + statsPopup.w - 5, statsPopup.y + 1 * statsPopup.fontSize);
+    ctx.fillText(`${Settings.IS_SIMULATION_RUNNING ? `${Settings.PAUSED ? '(Paused) ' : ''}` : '(Stopped) '}${STEPS_COUNT}`, statsPopup.x + statsPopup.w - 5, statsPopup.y + 1 * statsPopup.fontSize);
     ctx.fillText(`Infection: ${getDisease().name}`, statsPopup.x + statsPopup.w - 5, statsPopup.y + 2 * statsPopup.fontSize);
     ctx.fillText(`Incubation period: ${getDisease().incubationPeriod}`, statsPopup.x + statsPopup.w - 5, statsPopup.y + 3 * statsPopup.fontSize);
     ctx.fillText(`Duration: ${getDisease().duration}`, statsPopup.x + statsPopup.w - 5, statsPopup.y + 4 * statsPopup.fontSize);
@@ -52,7 +52,7 @@ export function main() {
     // Display graph
     const graphData = {
         x: statsPopup.x + 5,
-        y: statsPopup.fontSize * 9,
+        y: statsPopup.y + statsPopup.fontSize * 9,
         w: statsPopup.w - 10,
         h: statsPopup.h - statsPopup.fontSize * 9 - 5,
     }
