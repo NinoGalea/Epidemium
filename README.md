@@ -35,3 +35,15 @@ A graph is displayed, showing the evolution of the population shares in real tim
 ## Stopping and restarting
 When the number of people in the incubation and infected phases is 0, the simulation stops (displayed on the statistics page, next to the number of ticks).
 To restart the simulation at any time during the simulation, simply reload the page (`F5`, `Shift + R`, or `Cmd + R`).
+
+## Changelog:
+- `1.0`: Displays humans and chunks with just a healthy or infected system.
+  - `1.0.1`: Full disease cycle with incubation, infection, recovery and death.
+- `1.1`: Stats panel and key controls: press `I`, `G` or `Space bar` to show the stats panel, display the grid or pause the simulation.
+- `1.2`: Interactive setup. A panel has been added to change the simulation settings. The contamination rate has been fixed. The default behaviour of the refresh key has been prevented.
+  - `1.2.1`: The stats panel can now be moved by right-clicking when open. A README.md file has been added.
+  - `1.2.2`: Added temporary icon. The stylesheet has been moved to `assets/style.css`. Changed the default font form to Lexend.
+
+## Roadmap
+- `1.3`: Add the movement of individuals during the day (work/home).
+- `1.4`: Vaccine: creation and deployment of a vaccine among the population.

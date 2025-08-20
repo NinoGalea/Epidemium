@@ -31,7 +31,7 @@ export class Human {
     draw() {
         ctx.beginPath();
         ctx.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = Settings.COLORS[this.status.toUpperCase()] ? Settings.COLORS[this.status.toUpperCase()] : '#000000'
+        ctx.fillStyle = Settings.COLORS[this.status.toUpperCase()] ? Settings.COLORS[this.status.toUpperCase()] : '#000000';
         ctx.fill();
     }
 
@@ -45,7 +45,7 @@ export class Human {
         const chunk = Chunks.get(`${this.chunkPosition.x}_${this.chunkPosition.y}`);
         if (!chunk) return;
         /** @type {Array<string>} */
-        var neighbours = []
+        var neighbours = [];
         for (var n of chunk.neighbours) {
             var c = Chunks.get(n);
             if (!c) continue;
@@ -168,7 +168,7 @@ export class Human {
             vaccinated: 0,
             cured: 0,
             dead: 0
-        }
+        };
         for (const Human of Humans.values()) {
             statuses[Human.status]++;
         }

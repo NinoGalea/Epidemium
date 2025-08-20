@@ -11,7 +11,7 @@ export function main() {
         w: Math.min(CANVAS.width / 3, CANVAS.width - 200) - 10,
         h: CANVAS.height / 2 - 10,
         fontSize: 15
-    }
+    };
 
     // Background
     ctx.fillStyle = "#000000";
@@ -22,9 +22,9 @@ export function main() {
     // Population data
     const population = Human.count();
     const total = population.healthy + population.incubating + population.infected + population.vaccinated + population.cured + population.dead;
-    ctx.textAlign = "left"
+    ctx.textAlign = "left";
     ctx.fillStyle = "#ffffff";
-    ctx.font = `${statsPopup.fontSize}px sans-serif`
+    ctx.font = `${statsPopup.fontSize}px`;
     ctx.fillText(`Total population: ${total}`, statsPopup.x + 2, statsPopup.y + statsPopup.fontSize);
     ctx.fillText(`Alive / Dead: ${total - population.dead} / ${population.dead}`, statsPopup.x + 2, statsPopup.y + 2 * statsPopup.fontSize);
     ctx.fillStyle = Settings.COLORS.HEALTHY;
@@ -39,7 +39,7 @@ export function main() {
     ctx.fillText(`Cured: ${population.cured}`, statsPopup.x + 2, statsPopup.y + 7 * statsPopup.fontSize);
 
     // Display disease data
-    ctx.textAlign = "right"
+    ctx.textAlign = "right";
     ctx.fillStyle = "#ffffff";
     ctx.fillText(`${Settings.IS_SIMULATION_RUNNING ? `${Settings.PAUSED ? '(Paused) ' : ''}` : '(Stopped) '}${STEPS_COUNT}`, statsPopup.x + statsPopup.w - 5, statsPopup.y + 1 * statsPopup.fontSize);
     ctx.fillText(`Infection: ${getDisease().name}`, statsPopup.x + statsPopup.w - 5, statsPopup.y + 2 * statsPopup.fontSize);
@@ -55,9 +55,9 @@ export function main() {
         y: statsPopup.y + statsPopup.fontSize * 9,
         w: statsPopup.w - 10,
         h: statsPopup.h - statsPopup.fontSize * 9 - 5,
-    }
+    };
     const history = Human.countHistory();
-    ctx.fillStyle = "#aaaaaa"
+    ctx.fillStyle = "#aaaaaa";
     ctx.fillRect(graphData.x, graphData.y, graphData.w, graphData.h);
 
     const columnWidth = graphData.w / history.length;
@@ -73,7 +73,7 @@ export function main() {
             vaccinated: values.vaccinated / total * graphData.h,
             cured: values.cured / total * graphData.h,
             dead: values.dead / total * graphData.h
-        }
+        };
 
         // Draw each rectangle
         ctx.fillStyle = Settings.COLORS.HEALTHY;
